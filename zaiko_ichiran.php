@@ -11,18 +11,37 @@
 */
 
 //①セッションを開始する
+session_start();
 
 //②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if (/* ②の処理を書く */){
-	//③SESSIONの「error2」に「ログインしてください」と設定する。
-	//④ログイン画面へ遷移する。
-}
+// if (/* ②の処理を書く */){
+// 	//③SESSIONの「error2」に「ログインしてください」と設定する。
+// 	//④ログイン画面へ遷移する。
+// }
 
 //⑤データベースへ接続し、接続情報を変数に保存する
+$host = 'localhost';
+$user_name = 'root';
+$db_name = 'zaiko2020_yse';
+$password = '';
+$mysqli = new mysqli($host, $user_name, $password, $db_name);
 
-//⑥データベースで使用する文字コードを「UTF8」にする
+if ($mysqli->connect_error) {
+    echo $mysqli->connect_error;
+    exit();
+} else {
+    //echo 'ok' . PHP_EOL;
+	//⑥データベースで使用する文字コードを「UTF8」にする
+	$mysqli->set_charset('utf8');
+}
 
 //⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
+$sql = "SELECT * FROM books";
+if ($bookdate = $mysqli->query($sql)) {
+    // while ($row = $bookdate->fetch_assoc()) {
+    //     echo "{$row["id"]} {$row["name"]} {$row["email"]}" . PHP_EOL;
+    // $bookdate->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -44,8 +63,9 @@ if (/* ②の処理を書く */){
 				 * ⑧SESSIONの「success」にメッセージが設定されているかを判定する。
 				 * 設定されていた場合はif文の中に入る。
 				 */ 
-				if(/* ⑧の処理を書く */){
+				if(isset($_SESSION["success"])){
 					//⑨SESSIONの「success」の中身を表示する。
+					echo $_SESSION["success"];
 				}
 				?>
 			</div>
@@ -81,20 +101,22 @@ if (/* ②の処理を書く */){
 					<tbody>
 						<?php
 						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
-						while(/* ⑩の処理を書く */){
+						while($row = $bookdate->fetch_assoc()){
 							//⑪extract変数を使用し、1レコードのデータを渡す。
+							//$extract = $extract->get($id);
+							// extract($id);
 
 							echo "<tr id='book'>";
-							echo "<td id='check'><input type='checkbox' name='books[]'value="./* ⑫IDを設定する */."></td>";
-							echo "<td id='id'>/* ⑬IDを表示する */</td>";
-							echo "<td id='title'>/* ⑭titleを表示する */</td>";
-							echo "<td id='author'>/* ⑮authorを表示する */</td>";
-							echo "<td id='date'>/* ⑯salesDateを表示する */</td>";
-							echo "<td id='price'>/* ⑰priceを表示する */</td>";
-							echo "<td id='stock'>/* ⑱stockを表示する */</td>";
-
+							echo "<td id='check'><input type='checkbox' name='books[]'value='".$row['id']."'></td>";
+							echo "<td id='id'>".$row['id']."</td>";
+							echo "<td id='title'>".$row['title']."</td>";
+							echo "<td id='author'>".$row['author']."</td>";
+							echo "<td id='date'>".$row['salesDate']."</td>";
+							echo "<td id='price'>".$row['price']."</td>";
+							echo "<td id='stock'>".$row['stock']."</td>";
 							echo "</tr>";
 						}
+						$bookdate->close();
 						?>
 					</tbody>
 				</table>
