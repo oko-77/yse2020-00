@@ -19,7 +19,7 @@
 // }
 
 
-//③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
+// //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
 // if (/* ③の処理を書く */){
 // 	//④SESSIONの「error2」に「ログインしてください」と設定する。
 // 	//⑤ログイン画面へ遷移する。
@@ -52,14 +52,12 @@ function getId($id,$con){
 	 * SQLの実行結果を変数に保存する。
 	 */
 	$sql = "SELECT * FROM books WHERE id = ".$id;
+	$bookdate = null;
 	if ($bookdate = $con->query($sql)) {
 		//⑫実行した結果から1レコード取得し、returnで値を返す。
 		return $bookdate;
-		/*
-		* close()場所移動願い
-		*/
-		$bookdate->close();
 	}
+	$bookdate->close();
 	
 
 }
