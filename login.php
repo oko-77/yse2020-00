@@ -12,75 +12,90 @@
 	ログインしてください：ログインしていない状態で他のページに遷移した場合(ログイン画面に遷移し上記を表示)
 */
 //⑥セッションを開始する
+session_start();
 
 //①名前とパスワードを入れる変数を初期化する
-$name="";
-$pass="";
+$name = null;
+$password = null;
+
+// エラーメッセージを入れる変数
+$error = null;
+
+// メッセージを入れる変数
+$message = null;
+
 /*
  * ②ログインボタンが押されたかを判定する。
  * 押されていた場合はif文の中の処理を行う
  */
+if (isset($_POST['decision'])) {
+	/*
+	 * ③名前とパスワードが両方とも入力されているかを判定する。
+	 * 入力されていた場合はif文の中の処理を行う。
+	 */
+	if (!empty($_POST['name']) && !empty($_POST['pass'])) {
+		//④名前とパスワードにPOSTで送られてきた名前とパスワードを設定する
+		$name = $_POST['name'];
+		$password = $_POST['pass'];
+	} else {
+		//⑤名前かパスワードが入力されていない場合は、「名前かパスワードが未入力です」という文言をメッセージを入れる変数に設定する
+		$error = '名前かパスワードが未入力です';
+	}
+}
 
-// if (isset($_POST["decision"])) {
-// 	/*
-// 	 * ③名前とパスワードが両方とも入力されているかを判定する。
-// 	 * 入力されていた場合はif文の中の処理を行う。
-// 	 */
-// 	if (/* ③の処理を書く */) {
-// 		//④名前とパスワードにPOSTで送られてきた名前とパスワードを設定する
-// 	} else {
-// 		//⑤名前かパスワードが入力されていない場合は、「名前かパスワードが未入力です」という文言をメッセージを入れる変数に設定する
-// 	}
-// }
+//⑦名前が入力されているか判定する。入力されていた場合はif文の中に入る
+if (!empty($name)) {
+	//⑧名前に「yse」、パスワードに「2019」と設定されているか確認する。設定されていた場合はif文の中に入る
+	if ($name == 'yse' && $password == '2019'){
+		//⑨SESSIONに名前を設定し、SESSIONの「login」フラグをtrueにする
+		$_SESSION['name'] = $name;
+		$_SESSION['login'] = true;
 
-// //⑦名前が入力されているか判定する。入力されていた場合はif文の中に入る
-// if (/* ⑦の処理を書く */) {
-// 	//⑧名前に「yse」、パスワードに「2019」と設定されているか確認する。設定されていた場合はif文の中に入る
-// 	if (/* ⑧の処理を書く */){
-// 		//⑨SESSIONに名前を設定し、SESSIONの「login」フラグをtrueにする
-// 		//⑩在庫一覧画面へ遷移する
-// 		header(/* ⑩の遷移先を書く */);
-// 	}else{
-// 		//⑪名前もしくはパスワードが間違っていた場合は、「ユーザー名かパスワードが間違っています」という文言をメッセージを入れる変数に設定する
-// 	}
-// }
+		//⑩在庫一覧画面へ遷移する
+		header('Location: zaiko_ichiran.php');
+	}else{
+		//⑪名前もしくはパスワードが間違っていた場合は、「ユーザー名かパスワードが間違っています」という文言をメッセージを入れる変数に設定する
+		$error = 'ユーザー名かパスワードが間違っています';
+	}
+}
 
-// //⑫SESSIONの「error2」に値が入っているか判定する。入っていた場合はif文の中に入る
-// if (/* ⑫の処理を書く */) {
-// 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
-// 	//⑭SESSIONの「error2」にnullを入れる。
-// }
+//⑫SESSIONの「error2」に値が入っているか判定する。入っていた場合はif文の中に入る
+if (!empty($_SESSION['error2'])) {
+	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
+	$error = $_SESSION['error2'];
+	//⑭SESSIONの「error2」にnullを入れる。
+	$_SESSION['error2'] = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>ログイン</title>
-<link rel="stylesheet" href="css/login.css" type="text/css" />
+	<meta charset="UTF-8">
+	<title>ログイン</title>
+	<link rel="stylesheet" href="css/login.css" type="text/css" />
 </head>
 <body id="login">
 	<div id="main">
 		<h1>ログイン</h1>
 		<?php
-		// //⑮エラーメッセージの変数に入っている値を表示する
-		// echo "<div id='error'>", /* ⑮の変数を書く */, "</div>";
-		
+		//⑮エラーメッセージの変数に入っている値を表示する
+		echo "<div id='error'>", $error, "</div>";
+
 		// //⑯メッセージの変数に入っている値を表示する
-		// echo "<div id='msg'>", /* ⑯の変数を書く */, "</div>";
+		echo "<div id='msg'>", $message, "</div>";
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
 				<input type='text' name="name" size='5' placeholder="Username">
 			</p>
 			<p>
-				<input type='password' name='pass' size='5' maxlength='20'
-					placeholder="Password">
+				<input type='password' name='pass' size='5' maxlength='20' placeholder="Password">
 			</p>
 			<p>
-				<button type="submit" formmethod="POST" name="decision" value="1"
-					id="button">Login</button>
+				<button type="submit" formmethod="POST" name="decision" value="1" id="button">Login</button>
 			</p>
 		</form>
 	</div>
 </body>
+
 </html>
