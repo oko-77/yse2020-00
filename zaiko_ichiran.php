@@ -14,10 +14,12 @@
 session_start();
 
 //②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-// if (/* ②の処理を書く */){
-// 	//③SESSIONの「error2」に「ログインしてください」と設定する。
-// 	//④ログイン画面へ遷移する。
-// }
+if ($_SESSION['login'] == false){
+	//③SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION['error2'] = "ログインしてください";
+	//④ログイン画面へ遷移する。
+	header( "Location: login.php" ) ;
+}
 
 //⑤データベースへ接続し、接続情報を変数に保存する
 $host = 'localhost';
@@ -78,6 +80,9 @@ $bookdate = $mysqli->query($sql);
 				<button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="nyuka.php">入荷</button>
 
 				<button type="submit" id="btn1" formmethod="POST" name="decision" value="4" formaction="syukka.php">出荷</button>
+				<button type="submit" id="btn1" formmethod="POST" name="decision" value="5" formaction="new_product.php">新商品追加</button>
+				<button type="submit" id="btn1" formmethod="POST" name="decision" value="6" formaction="delete_product.php">商品削除</button>
+				<button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="product_search.php">商品検索</button>
 			</div>
 			<!-- 中央表示 -->
 			<div id="center">
