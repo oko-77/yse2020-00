@@ -14,7 +14,6 @@
 //⑥セッションを開始する
 session_start();
 
-
 //①名前とパスワードを入れる変数を初期化する
 $name = null;
 $password = null;
