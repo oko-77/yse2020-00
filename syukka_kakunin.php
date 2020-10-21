@@ -41,10 +41,12 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-// if (/* ⑤の処理を書く */){
-// 	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-// 	//⑦ログイン画面へ遷移する。
-// }
+if ($_SESSION['login'] == false){
+	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION['error2'] = "ログインしてください";
+	//⑦ログイン画面へ遷移する。
+	header( "Location: login.php" ) ;
+}
 
 //⑧データベースへ接続し、接続情報を変数に保存する
 $host = 'localhost';
@@ -117,13 +119,13 @@ if (/* ㉓の処理を書く */!empty($_POST['add'])) {
 			//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
 			updateByid($book, $mysqli, $book_total_number);
 			//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
-			$book_quantity++;
+			$number_of_books_1++;
 		}
 	}
 	//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
 	$_SESSION['success'] = '入荷が完了しました。';
 	//㉛「header」関数を使用して在庫一覧画面へ遷移する。
-	header("Location: http://localhost/yse2020/zaiko_ichiran.php");
+	header("Location: zaiko_ichiran.php");
 }
 ?>
 <!DOCTYPE html>
@@ -157,7 +159,7 @@ if (/* ㉓の処理を書く */!empty($_POST['add'])) {
 						//㉝POSTの「books」から値を取得し、変数に設定する。
 						foreach ($_POST['books'] as $book_1) {
 							// 	//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
-							$book_2 = getByID($book, $mysqli)->fetch_assoc();
+							$book_2 = getByID($book_1, $mysqli)->fetch_assoc();
 						?>
 							<tr>
 								<td><?php echo $book_2['title'];	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */ ?></td>

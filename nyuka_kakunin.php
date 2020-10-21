@@ -38,10 +38,12 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-// if (/* ⑤の処理を書く */){
-// 	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-// 	//⑦ログイン画面へ遷移する。
-// }
+if ($_SESSION['login'] == false){
+	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION['error2'] = "ログインしてください";
+	//⑦ログイン画面へ遷移する。
+	header( "Location: login.php" ) ;
+}
 
 //⑧データベースへ接続し、接続情報を変数に保存する
 $host = 'localhost';
@@ -131,7 +133,7 @@ if (!empty($_POST['add'])) {
 		$_SESSION['success'] = '入荷が完了しました。';
 
 		//㉛「header」関数を使用して在庫一覧画面へ遷移する。
-		header("Location: http://localhost/yse2020/zaiko_ichiran.php");
+		header("Location: zaiko_ichiran.php");
 	}
 }
 ?>
@@ -179,8 +181,9 @@ if (!empty($_POST['add'])) {
 							<input type="hidden" name="books[]" value="<?php echo $post_book/* ㊲ ㉝で取得した値を設定する */; ?>">
 							<input type="hidden" name="stock[]" value='<?php echo $_POST['stock'][$number_of_books_2]/* ㊳POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */; ?>'>
 						<?php
-							//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
+							//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。         
 							$number_of_books_2++;
+							
 						}
 						?>
 					</tbody>
