@@ -54,12 +54,12 @@ function getId($id,$con){
 	$sql = "SELECT * FROM books WHERE id = ".$id;
 
 	// 変数呼び出し
-	$bookdate = null;
-	if ($bookdate = $con->query($sql)) {
+	$bookinfo = null;
+	if ($bookinfo = $con->query($sql)) {
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
-	return $bookdate;
+	return $bookinfo;
 	}
-	$bookdate->close();
+	$bookinfo->close();
 }
 ?>
 <!DOCTYPE html>
