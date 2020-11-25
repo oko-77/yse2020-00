@@ -10,8 +10,7 @@
 
 //①セッションを開始する
 session_start();
-function getByid($id, $con)
-{
+function getByid($id, $con){
 	/* 
 	 * ②書籍を取得するSQLを作成する実行する。
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
